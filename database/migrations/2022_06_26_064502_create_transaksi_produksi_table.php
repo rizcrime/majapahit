@@ -19,7 +19,6 @@ class CreateTransaksiProduksiTable extends Migration
             $table->timestamp('tanggal_transaksi');
             $table->string('lokasi', 4);
             $table->string('kode', 4);
-            $table->integer('qty_actual');
             $table->timestamps();
         });
         Schema::table('transaksi_produksi', function ($table) {
