@@ -21,3 +21,6 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/transaksi', [App\Http\Controllers\TransaksiProduksiController::class, 'index'])->name('transaksi');
+
+Route::patch('/transaksi/update', [App\Http\Controllers\TransaksiProduksiController::class, 'update'])->name('update.transaksi');
