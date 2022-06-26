@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -20,6 +21,23 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers;
+
+    // change password read to MD5
+    protected function attemptLogin(Request $request)
+{
+    $user = \App\Models\Login::where([
+        'username' => $request->username,
+        'password' => md5($request->password)
+    ])->first();
+    
+    if ($user) {
+        $this->guard()->login($user, $request->has('remember'));
+
+        return true;
+    }
+
+    return false;
+}
 
     /**
      * Where to redirect users after login.
