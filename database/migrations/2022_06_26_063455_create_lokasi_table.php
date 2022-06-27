@@ -15,7 +15,7 @@ class CreateLokasiTable extends Migration
     {
         Schema::create('lokasi', function (Blueprint $table) {
             $table->id();
-            $table->string('kode', 4)->index();
+            $table->string('kode_lokasi', 4)->index();
             $table->string('nama_lokasi', 50);
             $table->timestamps();
         });

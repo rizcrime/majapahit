@@ -15,16 +15,16 @@ class CreateTransaksiProduksiTable extends Migration
     {
         Schema::create('transaksi_produksi', function (Blueprint $table) {
             $table->id();
-            $table->string('npk', 5)->index();
+            $table->string('npk_karyawan', 5)->index();
             $table->timestamp('tanggal_transaksi');
-            $table->string('lokasi', 4);
-            $table->string('kode', 4);
+            $table->string('kode_lokasi', 4);
+            $table->string('kode_item', 4);
             $table->timestamps();
         });
         Schema::table('transaksi_produksi', function ($table) {
-            $table->foreign('npk')->references('npk')->on('karyawan')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('lokasi')->references('kode')->on('lokasi')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('kode')->references('kode')->on('planning')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('npk_karyawan')->references('npk_karyawan')->on('karyawan')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('kode_lokasi')->references('kode_lokasi')->on('lokasi')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('kode_item')->references('kode_item')->on('item')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

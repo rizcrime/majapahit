@@ -11,23 +11,30 @@ class TransaksiProduksi extends Model
 
     protected $table = 'transaksi_produksi';
 
-    // public function karyawan(){
-    //     return $this->belongsTo(Karyawan::class, 'npk', 'npk');
-    // }
+    protected $fillable = [
+        'npk_karyawan',
+        'tanggal_transaksi',
+        'kode_lokasi',
+        'kode_item'
+    ];
 
-    // public function lokasi(){
-    //     return $this->belongsTo(Lokasi::class, 'lokasi', 'kode');
-    // }
+    public function karyawan(){
+        return $this->belongsTo(Karyawan::class, 'npk_karyawan', 'npk_karyawan');
+    }
 
-    // public function planning(){
-    //     return $this->belongsTo(Planning::class, 'kode', 'kode');
-    // }
+    public function lokasi(){
+        return $this->belongsTo(Lokasi::class, 'kode_lokasi', 'kode_lokasi');
+    }
 
-    // public function item(){
-    //     return $this->belongsTo(Item::class, 'kode', 'kode');
-    // }
+    public function planning(){
+        return $this->belongsTo(Planning::class, 'kode_item', 'kode_planning');
+    }
 
-    // public function login(){
-    //     return $this->belongsTo(Login::class, 'npk', 'username');
-    // }
+    public function item(){
+        return $this->belongsTo(Item::class, 'kode_item', 'kode_item');
+    }
+
+    public function login(){
+        return $this->belongsTo(Login::class, 'npk_karyawan', 'username');
+    }
 }

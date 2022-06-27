@@ -15,14 +15,14 @@ class CreatePlanningTable extends Migration
     {
         Schema::create('planning', function (Blueprint $table) {
             $table->id();
-            $table->string('kode', 4)->index();
+            $table->string('kode_planning', 4)->index();
             $table->integer('qty_target');
             $table->decimal('waktu_target');
             $table->timestamps();
         });
 
         Schema::table('planning', function ($table) {
-            $table->foreign('kode')->references('kode')->on('item')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('kode_planning')->references('kode_item')->on('item')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

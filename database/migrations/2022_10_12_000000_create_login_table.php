@@ -21,7 +21,7 @@ class CreateLoginTable extends Migration
             $table->timestamps();
         });
         Schema::table('login', function ($table) {
-            $table->foreign('username')->references('npk')->on('karyawan')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('username')->references('npk_karyawan')->on('karyawan')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

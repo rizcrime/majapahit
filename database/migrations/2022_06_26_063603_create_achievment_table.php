@@ -15,7 +15,7 @@ class CreateAchievmentTable extends Migration
     {
         Schema::create('achievment', function (Blueprint $table) {
             $table->id();
-            $table->string('kode', 4);
+            $table->string('kode_achievment', 4);
             $table->time('time_from');
             $table->time('time_to');
             $table->timestamps();

@@ -16,22 +16,22 @@ class PlanningSeeder extends Seeder
     {
         DB::table('planning')->insert([
             [
-                'kode' => 'M001',
+                'kode_planning' => 'M001',
                 'qty_target' => '10',
                 'waktu_target' => '20'
             ],
             [
-                'kode' => 'M002',
+                'kode_planning' => 'M002',
                 'qty_target' => '15',
                 'waktu_target' => '30'
             ],
             [
-                'kode' => 'M003',
+                'kode_planning' => 'M003',
                 'qty_target' => '12',
                 'waktu_target' => '24'
             ],
             [
-                'kode' => 'M004',
+                'kode_planning' => 'M004',
                 'qty_target' => '14',
                 'waktu_target' => '28'
             ]

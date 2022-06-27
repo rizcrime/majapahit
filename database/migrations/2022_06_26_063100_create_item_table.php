@@ -15,7 +15,7 @@ class CreateItemTable extends Migration
     {
         Schema::create('item', function (Blueprint $table) {
             $table->id();
-            $table->string('kode', 4)->index();
+            $table->string('kode_item', 4)->index();
             $table->string('nama_item', 50);
             $table->timestamps();
         });

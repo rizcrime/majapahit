@@ -16,19 +16,19 @@ class LokasiSeeder extends Seeder
     {
         DB::table('lokasi')->insert([
             [
-                "kode" => 'L001',
+                "kode_lokasi" => 'L001',
                 'nama_lokasi' => 'Lokasi 1'
             ],
             [
-                "kode" => 'L002',
+                "kode_lokasi" => 'L002',
                 'nama_lokasi' => 'Lokasi 2'
             ],
             [
-                "kode" => 'L003',
+                "kode_lokasi" => 'L003',
                 'nama_lokasi' => 'Lokasi 3'
             ],
             [
-                "kode" => 'L004',
+                "kode_lokasi" => 'L004',
                 'nama_lokasi' => 'Lokasi 4'
             ]
         ]);

@@ -1,6 +1,6 @@
 @extends('index')
 @section('content')
-
+<a class="btn btn-success" style="margin-bottom: 1%;" href="#signupModal" data-toggle="modal">Create</a>
 <div class="table-responsive">
     <table class="table table-bordered">
         <thead>
@@ -20,16 +20,16 @@
             @foreach($all_data as $value)
             <tr>
                 <th class="text-center">{{$loop->iteration}}</th>
-                <td class="text-center">{{$value->tr_tgl}}</td>
-                <td>{{$value->tr_kode}}</td>
-                <td>{{$value->it_nama}}</td>
-                <td>{{$value->lok_kode}}</td>
-                <td>{{$value->lok_nama}}</td>
-                <td class="text-end">{{$value->plan_qty}}</td>
-                <td class="text-end">{{$value->log_by}}</td>
+                <td class="text-center">{{$value->tanggal_transaksi}}</td>
+                <td>{{$value->item->kode_item}}</td>
+                <td>{{$value->item->nama_item}}</td>
+                <td>{{$value->lokasi->kode_lokasi}}</td>
+                <td>{{$value->lokasi->nama_lokasi}}</td>
+                <td class="text-end">{{$value->planning->qty_target}}</td>
+                <td class="text-end">{{$value->npk_karyawan}}</td>
                 <td class="text-center">
                     <a class="btn btn-warning" href="#signupModal{{$value->id}}" data-toggle="modal">Update</a>
-                    <a class="btn btn-danger" onclick="return confirm('Are you sure?');">Delete</a>
+                    <a class="btn btn-danger" onclick="return confirm('Are you sure?');" href="{{ route('delete.transaksi', ['id' => $value->id]) }}">Delete</a>
                 </td>
             </tr>
             <!-- MODAL -->
@@ -37,44 +37,44 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <!-- Modal root -->
-                        <div class="modal-header">
-                            <h2 class="modal-title">Update Data {{$value->tr_kode}}</h2>
+                        <div class="modal-header bg-warning">
+                            <h2 class="modal-title">Update Transaksi</h2>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <!-- Modal body -->
-                        <form method="post" action="{{route('update.transaksi')}}" action="patchlink">
-                            @method('patch')
+                        <form method="post" action="{{route('update.transaksi')}}">
+                            @csrf
                             <div class="modal-body">
-                                @csrf
+                                <input id="id_kt" name="id_kt" value="{{$value->id}}" hidden>
                                 <div class="row mb-3">
-                                    <label for="name" class="col-md-4 col-form-label text-md-end">{{ __("Tanggal") }}</label>
-                                    <div class="col-md-6">
-                                        <input value="{{$value->tr_tgl}}" id="rm" name="rm" class="form-control" />
+                                    <label for="name" class="col-md-3 col-form-label text-md-end">{{ __("Tanggal") }}</label>
+                                    <div class="col">
+                                        <input value="{{\Carbon\Carbon::now()}}" type="datetime-local" id="date_time" name="date_time" class="form-control" />
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label class="col-md-4 col-form-label text-md-end" for="kode_item">{{ __("Kode Item") }}</label>
-                                    <div class="col-md-6">
-                                        <select id="kode_item" name="kode_item" class="form-control">
-                                            <option value="{{$value->tr_kode}}"></option>
+                                    <label class="col-md-3 col-form-label text-md-end" for="cd_item">{{ __("Kode Item") }}</label>
+                                    <div class="col">
+                                        <select id="cd_item" name="cd_item" class="form-control">
+                                            <option value="">*wajib di isi</option>
                                             @foreach($item as $value)
-                                            <option value="{{$value->kode}}">
-                                                {{$value->kode}}
+                                            <option value="{{$value->kode_item}}">
+                                                {{$value->kode_item}}
                                             </option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label class="col-md-4 col-form-label text-md-end" for="kode_lokasi">{{ __("Kode Lokasi") }}</label>
-                                    <div class="col-md-6">
-                                        <select id="kode_lokasi" name="kode_lokasi" class="form-control">
-                                            <option value="{{$value->lok_kode}}"></option>
+                                    <label class="col-md-3 col-form-label text-md-end" for="cd_lokasi">{{ __("Kode Lokasi") }}</label>
+                                    <div class="col">
+                                        <select id="cd_lokasi" name="cd_lokasi" class="form-control">
+                                            <option value="">*wajib di isi</option>
                                             @foreach($lokasi as $value)
-                                            <option value="{{$value->kode}}">
-                                                {{$value->kode}}
+                                            <option value="{{$value->kode_lokasi}}">
+                                                {{$value->kode_lokasi}}
                                             </option>
                                             @endforeach
                                         </select>
@@ -93,7 +93,64 @@
             @endforeach
         </tbody>
     </table>
-</div>
+    <!-- MODAL CREATE -->
+    <div class="modal fade" id="signupModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!-- Modal root -->
+                <div class="modal-header bg-success">
+                    <h2 class="modal-title text-light">Create Transaksi</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <form method="post" action="{{route('create.transaksi')}}">
+                    @csrf
+                    <div class="modal-body">
+                        <input id="id_kt" name="id_kt" value="{{$value->id}}" hidden>
+                        <div class="row mb-3">
+                            <label for="name" class="col-md-3 col-form-label text-md-end">{{ __("Tanggal") }}</label>
+                            <div class="col">
+                                <input value="{{\Carbon\Carbon::now()}}" type="datetime-local" id="date_time" name="date_time" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-md-3 col-form-label text-md-end" for="cd_item">{{ __("Kode Item") }}</label>
+                            <div class="col">
+                                <select id="cd_item" name="cd_item" class="form-control">
+                                    <option value="">*wajib di isi</option>
+                                    @foreach($item as $value)
+                                    <option value="{{$value->kode_item}}">
+                                        {{$value->kode_item}}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-md-3 col-form-label text-md-end" for="cd_lokasi">{{ __("Kode Lokasi") }}</label>
+                            <div class="col">
+                                <select id="cd_lokasi" name="cd_lokasi" class="form-control">
+                                    <option value="">*wajib di isi</option>
+                                    @foreach($lokasi as $value)
+                                    <option value="{{$value->kode_lokasi}}">
+                                        {{$value->kode_lokasi}}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">
+                            {{ __("Create") }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 @endsection

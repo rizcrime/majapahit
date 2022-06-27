@@ -5,61 +5,63 @@ namespace App\Http\Controllers;
 use App\Models\TransaksiProduksi;
 use App\Models\Item;
 use App\Models\Lokasi;
-use Illuminate\Http\Client\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class TransaksiProduksiController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['auth', 'verified']);
+        $this->middleware(function ($request, $next) {
+            $this->all_data = TransaksiProduksi::with(['karyawan', 'lokasi', 'planning', 'item'])->get();
+            $this->id_kt = $request->id_kt;
+            $this->date_time = $request->date_time;
+            $this->kode_item = $request->input('cd_item');
+            $this->kode_lokasi = $request->input('cd_lokasi');
+            return $next($request);
+        });
+    }
+
+    public function create()
+    {
+        if ($this->kode_item != null && $this->kode_lokasi != null && $this->date_time != null) {
+            TransaksiProduksi::create([
+                'npk_karyawan' => Auth::user()->username,
+                'tanggal_transaksi' => date('Y-m-d H:i:s', strtotime($this->date_time)),
+                'kode_lokasi' => $this->kode_lokasi,
+                'kode_item' => $this->kode_item
+            ]);
+            return redirect('../transaksi')->with('success', 'Data Berhasil Dibuat!');
+        } else {
+            return redirect('../transaksi')->with('failed', 'Tidak boleh ada yang kosong');
+        }
+    }
+
     public function index()
     {
-        // inCompatible at ELoquent Laravel 8 ---- !!! ???
-        // $all_data = TransaksiProduksi::with(['karyawan', 'lokasi', 'planning', 'item'])->get();
-
-        $all_data = DB::table('transaksi_produksi')
-            ->join('karyawan', 'transaksi_produksi.npk', 'karyawan.npk')
-            ->join('lokasi', 'transaksi_produksi.lokasi', 'lokasi.kode')
-            ->join('planning', 'transaksi_produksi.kode', 'planning.kode')
-            ->join('item', 'transaksi_produksi.kode', 'item.kode')
-            ->join('login', 'transaksi_produksi.npk', 'login.username')
-            ->select([
-                'transaksi_produksi.id as id',
-                'transaksi_produksi.tanggal_transaksi as tr_tgl',
-                'transaksi_produksi.kode as tr_kode',
-                'item.nama_item as it_nama',
-                'lokasi.kode as lok_kode',
-                'lokasi.nama_lokasi as lok_nama',
-                'planning.qty_target as plan_qty',
-                'login.created_by as log_by'
-            ])
-            ->get();
+        $all_data = $this->all_data;
         $item = Item::get();
         $lokasi = Lokasi::get();
-        // return $lokasi;
         return view('transaksi', compact('all_data', 'item', 'lokasi'));
     }
 
-    public function update(Request $request)
+    public function update()
     {
-        $kode_item = $request->kode_item;
-        $kode_lokasi = $request->kode_lokasi;
-        if ($this->validasi_null($kode_item) == true) {
-            Item::where('kode_item', $kode_item)->update([
-                'kode_item' => $kode_item
+        if ($this->kode_item != null && $this->kode_lokasi != null && $this->date_time != null) {
+            TransaksiProduksi::where('id', $this->id_kt)->update([
+                'tanggal_transaksi' => date('Y-m-d H:i:s', strtotime($this->date_time)),
+                'kode_lokasi' => $this->kode_lokasi,
+                'kode_item' => $this->kode_item
             ]);
-        }
-        if ($this->validasi_null($kode_lokasi) == true) {
-            Lokasi::where('kode_lokasi', $kode_lokasi)->update([
-                'kode_lokasi' => $kode_lokasi
-            ]);
+            return redirect('../transaksi')->with('success', 'Data Berhasil Diperbaharui!');
+        } else {
+            return redirect('../transaksi')->with('failed', 'Tidak boleh ada yang kosong');
         }
     }
 
-    public function validasi_null($a)
+    public function destroy()
     {
-        if ($a != '' && $a != null) {
-            return true;
-        } else {
-            return false;
-        }
+        TransaksiProduksi::where('id', $this->id_kt)->delete();
+        return redirect('transaksi')->with('success', 'Data Berhasil Dihapus!');
     }
 }

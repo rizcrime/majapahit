@@ -16,17 +16,17 @@ class KaryawanSeeder extends Seeder
     {
         DB::table('karyawan')->insert([
             [
-                "npk" => "10001",
+                "npk_karyawan" => "10001",
                 "nama" => "Agus",
                 "alamat" => "Jakarta"
             ],
             [
-                "npk" => "10002",
+                "npk_karyawan" => "10002",
                 "nama" => "Asep",
                 "alamat" => "Purbalinga"
             ],
             [
-                "npk" => "10003",
+                "npk_karyawan" => "10003",
                 "nama" => "Jajang",
                 "alamat" => "Subang"
             ]

@@ -16,19 +16,19 @@ class ItemSeeder extends Seeder
     {
         DB::table('item')->insert([
             [
-                "kode" => 'M001',
+                "kode_item" => 'M001',
                 "nama_item" => 'Bolpen'
             ],
             [
-                "kode" => 'M002',
+                "kode_item" => 'M002',
                 "nama_item" => 'Pensil'
             ],
             [
-                "kode" => 'M003',
+                "kode_item" => 'M003',
                 "nama_item" => 'Penghapus'
             ],
             [
-                "kode" => 'M004',
+                "kode_item" => 'M004',
                 "nama_item" => 'Spidol'
             ]
         ]);
